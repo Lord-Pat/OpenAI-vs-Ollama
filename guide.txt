@@ -1,0 +1,137 @@
+GUÍA RÁPIDA — LLM vs LLM (OpenAI + Llama local con Ollama)
+=========================================================
+
+ARCHIVOS IMPLICADOS
+=========================================================
+
+types.ts // route.ts (openai) // route.ts (ollama) // .env.local
+
+OBJETIVO
+--------
+Crear una app en Next.js (React) donde:
+- OpenAI (nube) y un modelo local (Ollama) mantengan una conversación.
+- La interfaz es mínima: un botón “Iniciar conversación” y una caja donde se muestran mensajes uno debajo de otro.
+- Límite: 5 mensajes por cada LLM (total 10 mensajes).
+
+REQUISITOS
+----------
+- Node.js instalado (recomendado Node 20 LTS)
+- npm funcionando
+- Ollama instalado para ejecutar modelos en local
+- Una API Key de OpenAI (solo en el backend)
+
+---------------------------------------------------------
+1) INSTALAR Y PROBAR OLLAMA (LLM LOCAL)
+---------------------------------------------------------
+
+1.1 Instalar Ollama
+- macOS: descarga e instala desde la web oficial de Ollama
+- Windows/Linux: seguir instrucciones oficiales
+
+1.2 Comprobar que Ollama funciona
+En terminal:
+  ollama --version
+
+1.3 Descargar el modelo local: deepseek-r1:8b
+  ollama pull deepseek-r1:8b
+
+1.4 Ejecutar una prueba rápida (opcional)
+  ollama run deepseek-r1:8b
+
+1.5 Asegurar que el servidor está activo
+(Ollama normalmente levanta el servicio local automáticamente.)
+El endpoint local es:
+  http://localhost:11434
+
+---------------------------------------------------------
+2) CREAR PROYECTO NEXT.JS
+---------------------------------------------------------
+
+2.1 Crear el proyecto (TypeScript y App Router)
+  npx create-next-app@latest llm-vs-llm --ts --app
+
+2.2 Entrar en la carpeta
+  cd llm-vs-llm
+
+---------------------------------------------------------
+3) INSTALAR OPENAI VIA NPM
+---------------------------------------------------------
+
+3.1 Instalar el SDK oficial
+  npm install openai
+
+Si aparece un error raro de npm, probar:
+  npm install -g npm@latest
+  npm cache clean --force
+
+---------------------------------------------------------
+4) CREAR EL ARCHIVO .env.local
+---------------------------------------------------------
+
+En la raíz del proyecto (misma carpeta que package.json),
+crear el archivo:
+
+  .env.local
+
+Contenido:
+
+  OPENAI_API_KEY=PEGA_AQUI_TU_API_KEY
+  OPENAI_MODEL=gpt-4.1-mini
+
+  OLLAMA_BASE_URL=http://localhost:11434
+  OLLAMA_MODEL=deepseek-r1:8b
+
+NOTAS IMPORTANTES:
+- .env.local NO se sube a GitHub.
+- La API key de OpenAI NO debe ir al frontend (nunca en el navegador).
+
+---------------------------------------------------------
+5) ARRANCAR EL PROYECTO
+---------------------------------------------------------
+
+5.1 Iniciar el servidor de desarrollo
+  npm run dev
+
+5.2 Abrir en el navegador
+  http://localhost:3000
+
+---------------------------------------------------------
+6) CHECKLIST DE FUNCIONAMIENTO
+---------------------------------------------------------
+
+Ollama instalado:
+  ollama --version
+
+Modelo descargado:
+  ollama list
+  (debe aparecer deepseek-r1:8b)
+
+Proyecto Next creado y funcionando:
+  npm run dev
+
+SDK OpenAI instalado:
+  (revisar package.json -> dependencies -> openai)
+
+.env.local creado y correcto:
+  OPENAI_API_KEY=...
+  OLLAMA_MODEL=deepseek-r1:8b
+
+---------------------------------------------------------
+7) CONSEJOS PARA EL EJERCICIO (CLASE)
+---------------------------------------------------------
+
+- La conversación se hace por turnos:
+  5 turnos OpenAI + 5 turnos Llama = 10 mensajes
+
+- La UI mínima:
+  - Botón “Iniciar conversación”
+  - Caja con el historial (mensajes uno debajo del otro)
+
+- Mejores ampliaciones (para que el alumno añada UX/UI):
+  - Diferenciar mensajes por color y etiqueta (OpenAI vs Llama)
+  - Contador de turnos (OpenAI: 3/5, Llama: 2/5)
+  - Botón “Reset”
+  - Scroll automático al último mensaje
+  - Estado “Generando...” mientras espera respuesta
+
+FIN
