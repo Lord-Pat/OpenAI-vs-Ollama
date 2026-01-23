@@ -23,6 +23,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 ## AI manners  
 
 llama --> Personalidad pasota y feliciana
+
 Openai --> Persona muy radical y extremista
 
 ## Deploy on Vercel
